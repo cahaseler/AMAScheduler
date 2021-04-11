@@ -13,6 +13,7 @@ export default function Home() {
   const submitDate = () => {
     axios.get(`/api/ama?date=${amaDate}`).then((response) => {
       setSuggestedDates(response);
+      console.log(response);
     });
   };
 
@@ -24,16 +25,16 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h6 className={styles.title}>
+        <h3 className={styles.title}>
           Welcome to Craig&apos;s AMA Scheduler
-        </h6>
+        </h3>
 
         <Form>
           <Form.Group>
             <Form.Label>Approximate Date of AMA</Form.Label>
             <DatePicker selected={amaDate} onChange={(date) => setAmaDate(date)} />
           </Form.Group>
-          <Button onClick={submitDate()}>Get Suggested Dates</Button>
+          <Button onClick={submitDate}>Get Suggested Dates</Button>
         </Form>
 
         <p>
