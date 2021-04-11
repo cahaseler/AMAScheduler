@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import useState from 'react';
+import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
@@ -24,18 +24,16 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h3 className={styles.title}>
-          Welcome to Craig`&apos;`s AMA Scheduler
-        </h3>
+        <h6 className={styles.title}>
+          Welcome to Craig&apos;s AMA Scheduler
+        </h6>
 
         <Form>
           <Form.Group>
             <Form.Label>Approximate Date of AMA</Form.Label>
-            <Form.Control>
-              <DatePicker selected={amaDate} onChange={(date) => setAmaDate(date)} />
-            </Form.Control>
+            <DatePicker selected={amaDate} onChange={(date) => setAmaDate(date)} />
           </Form.Group>
-          <Button onClick={submitDate()} />
+          <Button onClick={submitDate()}>Get Suggested Dates</Button>
         </Form>
 
         <p>
