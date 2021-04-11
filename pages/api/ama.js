@@ -25,7 +25,7 @@ const getOptimalTimes = (times, weekStart) => {
   const calendarTimes = [];
   optimalTimes.forEach((time) => {
     const momentTime = weekStart.clone().add(time + 4, 'hours');
-    calendarTimes.push(momentTime.format('ddd, hA'));
+    calendarTimes.push(momentTime.format());
   });
 
   return calendarTimes;
@@ -39,12 +39,6 @@ export default (req, res) => {
     const calendarTimes = getOptimalTimes(model, weekStart);
     console.log(calendarTimes);
 
-    res.status(200).json([
-      requestedDate,
-      requestedDate,
-      requestedDate,
-      requestedDate,
-      requestedDate,
-    ]);
+    res.status(200).json(calendarTimes);
   }
 };
