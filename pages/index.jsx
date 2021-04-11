@@ -3,8 +3,11 @@ import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
+import WeekCalendar from 'react-week-calendar';
 import styles from '../styles/Home.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
+import 'react-week-calendar/dist/style.css';
+import moment from 'moment';
 
 export default function Home() {
   const [amaDate, setAmaDate] = useState(new Date());
@@ -12,8 +15,8 @@ export default function Home() {
 
   const submitDate = () => {
     axios.get(`/api/ama?date=${amaDate}`).then((response) => {
-      setSuggestedDates(response);
-      console.log(response);
+      setSuggestedDates(response.data);
+      console.log(response.data);
     });
   };
 
@@ -36,6 +39,13 @@ export default function Home() {
           </Form.Group>
           <Button onClick={submitDate}>Get Suggested Dates</Button>
         </Form>
+
+        <WeekCalendar
+          startTime={moment({ h: 4, m: 0 })}
+          scaleUnit={60}
+          useModal={false}
+
+        />
 
         <p>
           More information can be found on the
