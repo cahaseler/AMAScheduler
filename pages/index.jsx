@@ -14,7 +14,7 @@ export default function Home() {
   const [suggestedDates, setSuggestedDates] = useState([]);
 
   const submitDate = () => {
-    axios.get(`/api/ama?date=${amaDate}`).then((response) => {
+    axios.get(`/api/ama?date=${amaDate.toISOString()}`).then((response) => {
       setSuggestedDates(response.data);
       console.log(response.data);
     });
@@ -41,9 +41,10 @@ export default function Home() {
         </Form>
 
         <WeekCalendar
-          startTime={moment({ h: 4, m: 0 })}
+          startTime={moment({ h: 0, m: 0 })}
           scaleUnit={60}
           useModal={false}
+          dayFormat="ddd, MM/DD"
 
         />
 
