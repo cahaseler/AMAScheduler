@@ -39,15 +39,14 @@ const convertToIntervals = (calendarTimes, amasThisWeek) => {
     intervals.push(
       {
         uid: index,
-        start: moment(time),
-        end: moment(time).clone().add(1, 'h'),
+        start: moment(time).add(3, 'h'),
+        end: moment(time).clone().add(4, 'h'),
         value: 'Suggested',
       },
     );
   });
   amasThisWeek.forEach((ama, index) => {
     let amaTitle = '';
-    console.log(ama);
     if (ama.summary.includes('[')) {
       amaTitle = ama.summary.substring(ama.summary.indexOf('[') + 1, ama.summary.indexOf(']'));
     } else {
@@ -69,6 +68,7 @@ export default async (req, res) => {
   if (req.method === 'GET') {
     const requestedDate = moment(req.query.date);
     const weekStart = requestedDate.startOf('week');
+    console.log(weekStart);
     const weekEnd = weekStart.clone();
     weekEnd.add(1, 'w');
 
@@ -86,8 +86,10 @@ export default async (req, res) => {
         }
         console.log(`Week start:${weekStart} Week end: ${weekEnd}`);
         const amasThisWeek = events.filter((ama) => moment(ama.start).isAfter(weekStart) && moment(ama.start).isBefore(weekEnd));
+        console.log(customModel);
         amasThisWeek.forEach((ama) => {
           const startHour = moment.duration(moment(ama.start).diff(weekStart)).asHours();
+          console.log(startHour);
           customModel[startHour] -= 4;
           customModel[startHour + 1] -= 4;
           customModel[startHour + 2] -= 2;
@@ -101,6 +103,7 @@ export default async (req, res) => {
             customModel[startHour + 2] = 0;
           }
         });
+        console.log(customModel);
         const calendarTimes = getOptimalTimes(customModel, weekStart);
 
         console.log(calendarTimes);

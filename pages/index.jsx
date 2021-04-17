@@ -66,7 +66,7 @@ function Calendar({ loading, suggestedDates, amaDate }) {
               In the week of
               {' '}
               {startDay.format('MMMM Do YYYY')}
-              , we reccomend the following times for an AMA:
+              , we reccomend the following times for an AMA (EST):
             </h4>
 
           </Col>
@@ -79,7 +79,7 @@ function Calendar({ loading, suggestedDates, amaDate }) {
               <ul>
                 {momentDates.map((ama) => {
                   if (ama.value === 'Suggested') {
-                    return <li>{ama.start.format('ha   MMMM Do YYYY')}</li>;
+                    return <li>{ama.start.format('ha MMMM Do')}</li>;
                   }
                 })}
               </ul>
