@@ -131,7 +131,7 @@ function DateForm({
         <Form.Group>
           <Form.Label style={{ paddingRight: '1em' }}>Approximate Date of AMA: </Form.Label>
           <DatePicker selected={amaDate} onChange={(date) => setAmaDate(date)} />
-          <Button onClick={submitDate} style={{ marginLeft: '1em', marginTop: '-0.4em' }}>Get Suggested Dates</Button>
+          <Button onClick={submitDate} style={{ marginLeft: '1em', marginTop: '-0.4em' }}>Get Suggested Times</Button>
         </Form.Group>
 
       </Form>
