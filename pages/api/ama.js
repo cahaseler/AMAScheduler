@@ -26,7 +26,7 @@ const getOptimalTimes = (times, weekStart) => {
 
   const calendarTimes = [];
   optimalTimes.forEach((time) => {
-    const momentTime = weekStart.clone().add(time, 'hours');
+    const momentTime = weekStart.clone().add(time + 4, 'hours');
     calendarTimes.push(momentTime.format());
   });
 
