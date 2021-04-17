@@ -1,5 +1,7 @@
+/* eslint-disable max-len */
 import moment from 'moment';
 
+const PublicGoogleCalendar = require('public-google-calendar');
 const { model } = require('../../model.json');
 
 const getOptimalTimes = (times, weekStart) => {
@@ -7,7 +9,7 @@ const getOptimalTimes = (times, weekStart) => {
   let numResults = 0;
   const optimalTimes = [];
 
-  while (numResults < 10) {
+  while (numResults < 6) {
     const indexOfMaxValue = workingTimes.indexOf(Math.max(...workingTimes));
     workingTimes.splice(indexOfMaxValue, 1, 0);
     let sufficientlyDifferent = true;
@@ -31,14 +33,81 @@ const getOptimalTimes = (times, weekStart) => {
   return calendarTimes;
 };
 
-export default (req, res) => {
+const convertToIntervals = (calendarTimes, amasThisWeek) => {
+  const intervals = [];
+  calendarTimes.forEach((time, index) => {
+    intervals.push(
+      {
+        uid: index,
+        start: moment(time),
+        end: moment(time).clone().add(1, 'h'),
+        value: 'Suggested',
+      },
+    );
+  });
+  amasThisWeek.forEach((ama, index) => {
+    let amaTitle = '';
+    console.log(ama);
+    if (ama.summary.includes('[')) {
+      amaTitle = ama.summary.substring(ama.summary.indexOf('[') + 1, ama.summary.indexOf(']'));
+    } else {
+      amaTitle = ama.summary;
+    }
+    intervals.push(
+      {
+        uid: calendarTimes.length + index,
+        start: moment(ama.start),
+        end: moment(ama.end),
+        value: amaTitle,
+      },
+    );
+  });
+  return intervals;
+};
+
+export default async (req, res) => {
   if (req.method === 'GET') {
     const requestedDate = moment(req.query.date);
     const weekStart = requestedDate.startOf('week');
+    const weekEnd = weekStart.clone();
+    weekEnd.add(1, 'w');
 
-    const calendarTimes = getOptimalTimes(model, weekStart);
-    console.log(calendarTimes);
+    const customModel = model;
 
-    res.status(200).json(calendarTimes);
+    const amaCalendar = new PublicGoogleCalendar({ calendarId: 'amaverify@gmail.com' });
+
+    return new Promise((resolve) => {
+      amaCalendar.getEvents((err, events) => {
+        // eslint-disable-next-line no-console
+        if (err) {
+          console.log(err.message);
+          res.status(500);
+          return resolve();
+        }
+        console.log(`Week start:${weekStart} Week end: ${weekEnd}`);
+        const amasThisWeek = events.filter((ama) => moment(ama.start).isAfter(weekStart) && moment(ama.start).isBefore(weekEnd));
+        amasThisWeek.forEach((ama) => {
+          const startHour = moment.duration(moment(ama.start).diff(weekStart)).asHours();
+          customModel[startHour] -= 4;
+          customModel[startHour + 1] -= 4;
+          customModel[startHour + 2] -= 2;
+          if (customModel[startHour] < 0) {
+            customModel[startHour] = 0;
+          }
+          if (customModel[startHour + 1] < 0) {
+            customModel[startHour + 1] = 0;
+          }
+          if (customModel[startHour + 2] < 0) {
+            customModel[startHour + 2] = 0;
+          }
+        });
+        const calendarTimes = getOptimalTimes(customModel, weekStart);
+
+        console.log(calendarTimes);
+        res.status(200).json(convertToIntervals(calendarTimes, amasThisWeek));
+        return resolve();
+      });
+    });
   }
+  return res.status(400);
 };
