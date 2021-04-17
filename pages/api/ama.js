@@ -39,8 +39,8 @@ const convertToIntervals = (calendarTimes, amasThisWeek) => {
     intervals.push(
       {
         uid: index,
-        start: moment(time).add(3, 'h'),
-        end: moment(time).clone().add(4, 'h'),
+        start: moment(time).add(4, 'h'),
+        end: moment(time).clone().add(5, 'h'),
         value: 'Suggested',
       },
     );
