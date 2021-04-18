@@ -66,7 +66,7 @@ function Calendar({ loading, suggestedDates, amaDate }) {
               In the week of
               {' '}
               {startDay.format('MMMM Do YYYY')}
-              , we reccomend the following times for an AMA (EST):
+              , we recomend the following times for an AMA (EST):
             </h4>
 
           </Col>
