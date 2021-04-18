@@ -6,8 +6,8 @@ import time
 import csv
 
 SUBREDDIT = "iama"
-CLIENT_ID = '5_z5bZcSuFkYLA'
-CLIENT_SECRET = '5_z5bZcSuFkYLA'
+CLIENT_ID = '****'
+CLIENT_SECRET = '****'
 USER_AGENT = 'praw:iama_datacollector:1.1 (by /u/cahaseler)'
 
 reddit = praw.Reddit(client_id=CLIENT_ID,
