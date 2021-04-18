@@ -66,7 +66,7 @@ const convertToIntervals = (calendarTimes, amasThisWeek) => {
 
 export default async (req, res) => {
   if (req.method === 'GET') {
-    const requestedDate = moment(req.query.date);
+    const requestedDate = moment(req.query.date).startOf('day');
     const weekStart = requestedDate.clone().startOf('week');
     console.log(weekStart);
     const weekEnd = weekStart.clone();
